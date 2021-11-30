@@ -27,17 +27,8 @@ function GamePlayForm(props) {
 
     const gameData = [enteredPos1,enteredPos2,enteredPos3,enteredPos4];
     console.log(gameData);
-    const doGameMove = await props.chainReference[1].methods.gameMove(gameData[0],gameData[1],gameData[2],gameData[3]).send({ from: props.chainReference[0], gasPrice: 8000000000, gas: 4700000 });
+    await props.chainReference[1].methods.gameMove(gameData[0],gameData[1],gameData[2],gameData[3]).send({ from: props.chainReference[0], gasPrice: 8000000000, gas: 4700000 });
   }
-
-  async function checkCombination(event) {
-    // prevents browser default, allowing us to handle the submission with JS    
-    event.preventDefault();
-    console.log("Check Button clicked!");
-    const correctCount = await props.chainReference[1].methods.getCorrect().call({ from: props.chainReference[0]});    
-    console.log("Number Correct");
-    console.log(correctCount);
-  }  
 
   return (
     <div>
@@ -84,7 +75,6 @@ function GamePlayForm(props) {
             </select>
           </Col>    
         </Row>
-
         <Row>
           <Col>
             <div className="d-grid gap-2">
@@ -92,13 +82,6 @@ function GamePlayForm(props) {
                 Submit
               </Button>
             </div>        
-          </Col>
-          <Col>
-            <div className="d-grid gap-2">
-              <Button variant="secondary" size="lg" onClick={checkCombination}>
-                Check 
-              </Button>
-            </div>  
           </Col>
         </Row>
       </form>  

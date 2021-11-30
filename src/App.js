@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Header from "./pages/Header";
 import GamePlayForm from "./components/stages/GamePlayForm";
@@ -8,9 +7,22 @@ import Web3 from 'web3';
 import Masterblock from "./abis/Masterblock.json";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from 'react-bootstrap/Button';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends Component { 
+
+  setCount(value) {
+    this.setState({correctCount: value.toString()});
+    console.log("Correct Count");
+    console.log(this.state.correctCount);
+  }
+
+  setAttempts(value) {
+    this.setState({attempts: value.toString()});
+    console.log("Attempts:");
+    console.log(this.state.attempts);
+  }  
 
   async componentWillMount() {
     await this.loadWeb3()
@@ -34,41 +46,52 @@ class App extends Component {
     const web3 = window.web3;
     // Load account
     const accounts = await web3.eth.getAccounts();
-    this.setState({ account: accounts[0] });
+    this.account = accounts[0];
     console.log("Account:");
-    console.log(this.state.account);    
+    console.log(this.account);        
     this.blockchainRef[0] = this.state.account;
-    const networkId = await web3.eth.net.getId();
-    const networkData = Masterblock.networks[networkId];
-    if(networkData) {
-      const masterblock = web3.eth.Contract(Masterblock.abi, networkData.address);
-      this.blockchainRef[1] = masterblock;
-      this.setState({masterblock});
+    this.blockchainRef[0] = this.account;    
+    this.networkId = await web3.eth.net.getId();    
+    this.networkData = Masterblock.networks[this.networkId];        
+    
+    if(this.networkData) {
+      this.masterblock = web3.eth.Contract(Masterblock.abi, this.networkData.address);
+      this.blockchainRef[1] = this.masterblock;      
       // Generate gameplay combination
       const setGame = this.combination;
       console.log("setGame:");
       console.log(setGame);
       // Set the game
-      const gameStarted = await this.state.masterblock.methods.setValues(setGame[0],setGame[1],setGame[2],setGame[3]).send({ from: this.state.account, gasPrice: 8000000000, gas: 4700000 });
+      const gameStarted = await this.masterblock.methods.setValues(setGame[0],setGame[1],setGame[2],setGame[3]).send({ from: this.account, gasPrice: 8000000000, gas: 4700000 });      
       console.log("gameStarted:");
-      console.log(gameStarted);
-
-//      const attempts = await this.state.masterblock.methods.getAttempts().call({ from: this.state.account, gasPrice: 8000000000, gas: 4700000 });
-//      console.log("attempts:");
-//      console.log(attempts);      
+      console.log(gameStarted);      
     } else {
       window.alert('Masterblock contract not deployed to detected network.')
     }
   }
 
+  async checkCombination(event) {
+    // prevents browser default, allowing us to handle the submission with JS    
+    event.preventDefault();
+    console.log("Number Correct");
+    // Get the number correct
+    await this.masterblock.methods.getCorrect().call().then((data) => {this.setCount(data)});
+    // Update attempts
+    await this.masterblock.methods.getAttempts().call().then((data) => {this.setAttempts(data)});    
+
+  }    
+
   constructor(props) {
     super(props);
     this.state = {
-      account: '',
-      productCount: 0,
-      products: [],
-      loading: true
+      correctCount: 0,
+      attempts: 0
     }
+    // Blockchain Vars
+    this.account = 0;
+    this.networkId = 0;
+    this.networkData = 0;
+    this.masterblock = 0;
     // the connection to the contract
     this.blockchainRef = []
     // set the combination
@@ -96,10 +119,10 @@ class App extends Component {
           <Header></Header>
           <Row>
             <Col>
-            <p>Number of Attempts:</p>
+              <p>Number of Attempts: {this.state.attempts} </p>
             </Col>
             <Col>
-              <p>Correct Positions:</p>
+              <p>Correct Positions: {this.state.correctCount} </p>
             </Col>                                
           </Row>
           <Row>
@@ -107,6 +130,13 @@ class App extends Component {
           </Row>
           <Row>
             <GamePlayForm chainReference={this.blockchainRef}></GamePlayForm>
+          </Row>
+          <Row>
+            <div className="d-grid gap-2">
+              <Button variant="secondary" size="lg" onClick={this.checkCombination.bind(this)}>
+                Check 
+              </Button>
+            </div>              
           </Row>     
         </Layout>
       </div>

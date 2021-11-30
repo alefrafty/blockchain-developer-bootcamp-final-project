@@ -10023,6 +10023,12 @@
     "version": "0.8.3+commit.8d00100c.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0xC71a959A4180094ad2035c4A3D4C304dF56E844C",
+      "transactionHash": "0x0dc5239e10a7d9e53eef15d76f0e9c6b14cf045f7b78b66d17f4ac5da75c4206"
+    },
     "5777": {
       "events": {
         "0x6b8e536173dd377f9f63d917a40b6cf6937e2f6a5870cb8e349efecf1cebcd04": {
@@ -10111,12 +10117,12 @@
         }
       },
       "links": {},
-      "address": "0x21b77189408F6DAbc3A3c0be292B8A6276b835B2",
-      "transactionHash": "0x42289cf548d4eca6dbd20c9ac0e3a5584a1ec4c4eb8cfdc7ae35750aaed20fba"
+      "address": "0x42466c82bA61C6C397ff5BA2E314F34cBB23E8aE",
+      "transactionHash": "0x8d898550ecc301600f1c49320de54267fb260667fe89503b20be9a279182d956"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-30T13:14:37.820Z",
+  "updatedAt": "2021-11-30T15:00:31.465Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Alejandro Fraga",
