@@ -30,3 +30,14 @@ Pre-requisite: Game is in progress
 - Player gives up
 Pre-requisite: Game is in progress
 1. If Player press Give Up button, the game will end. The interface should call revealCombination function so the value generated on the contract is displayed on the interface
+
+Installation instructions:
+The project uses React framework. All the required packages are described under package.json file.
+The contract is located under /src/contract directory
+The test are located under /test and can be executed in truffle using "truffle test" command.
+It was deployed on Rinkeby network.
+
+
+Link to Video with screencast: https://youtu.be/UHCpqJR6UHw
+
+Link to the application online: https://masterblock.pages.dev

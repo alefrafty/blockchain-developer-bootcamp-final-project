@@ -59,12 +59,9 @@ class App extends Component {
       this.blockchainRef[1] = this.masterblock;      
       // Generate gameplay combination
       const setGame = this.combination;
-      console.log("setGame:");
-      console.log(setGame);
       // Set the game
       const gameStarted = await this.masterblock.methods.setValues(setGame[0],setGame[1],setGame[2],setGame[3]).send({ from: this.account, gasPrice: 8000000000, gas: 4700000 });      
-      console.log("gameStarted:");
-      console.log(gameStarted);      
+      console.log("Game combination is set...");  
     } else {
       window.alert('Masterblock contract not deployed to detected network.')
     }
